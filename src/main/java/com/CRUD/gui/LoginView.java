@@ -150,6 +150,7 @@ public class LoginView extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "Login bem-sucedido!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
         // Aqui você pode abrir a nova view, por exemplo:
         // new MainView().setVisible(true);
+        new TelaPrincipal().setVisible(true);
         this.dispose(); // Fecha a janela de login
     } else {
         JOptionPane.showMessageDialog(this, "Login ou senha inválidos.", "Erro", JOptionPane.ERROR_MESSAGE);
