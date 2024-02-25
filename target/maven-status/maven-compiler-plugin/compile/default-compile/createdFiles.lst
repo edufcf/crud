@@ -1,0 +1,17 @@
+com\CRUD\Main$1.class
+com\CRUD\modelo\Cliente.class
+com\CRUD\gui\LoginView.class
+com\CRUD\gui\TelaPrincipal.class
+com\CRUD\util\ResizeIMG.class
+com\CRUD\Main.class
+com\CRUD\gui\TelaPrincipal$1.class
+com\CRUD\util\JPAUtil.class
+com\CRUD\gui\LoginView$1.class
+com\CRUD\modelo\Serviço.class
+com\CRUD\modelo\Funcionario.class
+com\CRUD\gui\LoginView$2.class
+com\CRUD\dao\ServiçoDAO.class
+com\CRUD\dao\ClienteDAO.class
+com\CRUD\dao\UsuarioDAO.class
+com\CRUD\modelo\Usuario.class
+com\CRUD\dao\FuncionarioDAO.class
