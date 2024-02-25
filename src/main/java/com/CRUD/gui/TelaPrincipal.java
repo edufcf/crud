@@ -6,6 +6,8 @@ package com.CRUD.gui;
 
 import com.CRUD.util.ResizeIMG;
 import javax.swing.ImageIcon;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
@@ -16,9 +18,12 @@ public class TelaPrincipal extends javax.swing.JFrame {
     /**
      * Creates new form TelaPrincipal
      */
+    
+    
     public TelaPrincipal() {
         initComponents();
          setLocationRelativeTo(null);   
+         scrollPane.setVisible(false);
     }
 
     /**
@@ -35,6 +40,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
         btnFunc = new javax.swing.JButton();
         btnServico = new javax.swing.JButton();
         PainelCentral = new javax.swing.JPanel();
+        scrollPane = new javax.swing.JScrollPane();
+        Lista = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -82,15 +89,31 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        Lista.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        scrollPane.setViewportView(Lista);
+
         javax.swing.GroupLayout PainelCentralLayout = new javax.swing.GroupLayout(PainelCentral);
         PainelCentral.setLayout(PainelCentralLayout);
         PainelCentralLayout.setHorizontalGroup(
             PainelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 639, Short.MAX_VALUE)
+            .addGroup(PainelCentralLayout.createSequentialGroup()
+                .addGap(36, 36, 36)
+                .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(139, Short.MAX_VALUE))
         );
         PainelCentralLayout.setVerticalGroup(
             PainelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 529, Short.MAX_VALUE)
+            .addGroup(PainelCentralLayout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(66, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -118,20 +141,35 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void btnClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientesActionPerformed
         // TODO add your handling code here:
+        scrollPane.setVisible(true);
     }//GEN-LAST:event_btnClientesActionPerformed
 
     private void btnFuncActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFuncActionPerformed
         // TODO add your handling code here:
+        scrollPane.setVisible(true);
     }//GEN-LAST:event_btnFuncActionPerformed
 
     private void btnServicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnServicoActionPerformed
         // TODO add your handling code here:
+        scrollPane.setVisible(true);
     }//GEN-LAST:event_btnServicoActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws UnsupportedLookAndFeelException {
+        
+                try {
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Windows".equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException | InstantiationException
+                | IllegalAccessException | UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -164,10 +202,12 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable Lista;
     private javax.swing.JPanel PainelCentral;
     private javax.swing.JPanel PainelLateral;
     private javax.swing.JButton btnClientes;
     private javax.swing.JButton btnFunc;
     private javax.swing.JButton btnServico;
+    private javax.swing.JScrollPane scrollPane;
     // End of variables declaration//GEN-END:variables
 }
