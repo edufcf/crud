@@ -4,10 +4,15 @@
  */
 package com.CRUD.gui;
 
+import com.CRUD.dao.ClienteDAO;
+import com.CRUD.modelo.Cliente;
 import com.CRUD.util.ResizeIMG;
+import java.util.List;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -19,12 +24,32 @@ public class TelaPrincipal extends javax.swing.JFrame {
      * Creates new form TelaPrincipal
      */
     
+    private boolean listaClientesVisivel = false;
+    private boolean listaServicosVisivel = false;
+    private boolean listaFuncionarioVisivel = false;
+    private boolean botaoNovoVisivel = false;
+    private boolean botaoEditarVisivel = false;
+    private boolean botaoExcluirVisivel = false;
+    private boolean textoPesquisarVisivel = false;
     
     public TelaPrincipal() {
         initComponents();
          setLocationRelativeTo(null);   
          scrollPane.setVisible(false);
+         btnEditar.setVisible(false);
+         btnNovo.setVisible(false);
+         btnExcluir.setVisible(false);
+         txtPesquisar.setVisible(false);
     }
+    
+    public void recarregarListaClientes() {
+    DefaultTableModel modelo = (DefaultTableModel) tableCSF.getModel();
+    modelo.setRowCount(0); // Limpa a tabela antes de recarregar
+    modelo.setColumnIdentifiers(new String[]{"ID", "Nome", "Endereço", "Email", "Plano Contratado"}); // Define as colunas se ainda não estiverem definidas.
+    
+    ClienteDAO clienteDao = new ClienteDAO();
+    clienteDao.carregarClientesNoModelo(modelo); // Carrega os clientes no modelo
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -41,9 +66,18 @@ public class TelaPrincipal extends javax.swing.JFrame {
         btnServico = new javax.swing.JButton();
         PainelCentral = new javax.swing.JPanel();
         scrollPane = new javax.swing.JScrollPane();
-        Lista = new javax.swing.JTable();
+        tableCSF = new javax.swing.JTable();
+        btnLogout = new javax.swing.JButton();
+        btnNovo = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
+        btnExcluir = new javax.swing.JButton();
+        txtPesquisar = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("GN - Geração Net");
+        setPreferredSize(new java.awt.Dimension(800, 600));
+
+        PainelLateral.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnClientes.setText("Clientes");
         btnClientes.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
@@ -52,6 +86,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 btnClientesActionPerformed(evt);
             }
         });
+        PainelLateral.add(btnClientes, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 13, 94, 34));
 
         btnFunc.setText("Funcionários");
         btnFunc.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
@@ -60,6 +95,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 btnFuncActionPerformed(evt);
             }
         });
+        PainelLateral.add(btnFunc, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 117, 94, 34));
 
         btnServico.setText("Serviços");
         btnServico.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
@@ -68,28 +104,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 btnServicoActionPerformed(evt);
             }
         });
+        PainelLateral.add(btnServico, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 65, 94, 34));
 
-        javax.swing.GroupLayout PainelLateralLayout = new javax.swing.GroupLayout(PainelLateral);
-        PainelLateral.setLayout(PainelLateralLayout);
-        PainelLateralLayout.setHorizontalGroup(
-            PainelLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnFunc, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
-            .addComponent(btnServico, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btnClientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        PainelLateralLayout.setVerticalGroup(
-            PainelLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PainelLateralLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btnClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnServico, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnFunc, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        PainelCentral.setLayout(null);
 
-        Lista.setModel(new javax.swing.table.DefaultTableModel(
+        tableCSF.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -97,31 +116,57 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
             }
         ));
-        scrollPane.setViewportView(Lista);
+        scrollPane.setViewportView(tableCSF);
 
-        javax.swing.GroupLayout PainelCentralLayout = new javax.swing.GroupLayout(PainelCentral);
-        PainelCentral.setLayout(PainelCentralLayout);
-        PainelCentralLayout.setHorizontalGroup(
-            PainelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PainelCentralLayout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(139, Short.MAX_VALUE))
-        );
-        PainelCentralLayout.setVerticalGroup(
-            PainelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PainelCentralLayout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(66, Short.MAX_VALUE))
-        );
+        PainelCentral.add(scrollPane);
+        scrollPane.setBounds(40, 60, 510, 372);
+
+        btnLogout.setText("Logout");
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
+        PainelCentral.add(btnLogout);
+        btnLogout.setBounds(590, 450, 71, 25);
+
+        btnNovo.setText("Novo");
+        btnNovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNovoActionPerformed(evt);
+            }
+        });
+        PainelCentral.add(btnNovo);
+        btnNovo.setBounds(340, 450, 61, 25);
+
+        btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+        PainelCentral.add(btnEditar);
+        btnEditar.setBounds(410, 450, 63, 25);
+
+        btnExcluir.setText("Excluir");
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
+        PainelCentral.add(btnExcluir);
+        btnExcluir.setBounds(480, 450, 70, 25);
+
+        txtPesquisar.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Pesquisar", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
+        PainelCentral.add(txtPesquisar);
+        txtPesquisar.setBounds(40, 10, 510, 40);
+        txtPesquisar.getAccessibleContext().setAccessibleDescription("");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(PainelLateral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(PainelCentral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -141,18 +186,99 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void btnClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientesActionPerformed
         // TODO add your handling code here:
+            if (listaClientesVisivel) {
+        scrollPane.setVisible(false); // Esconde a lista
+        btnEditar.setVisible(false);
+        btnNovo.setVisible(false);
+        btnExcluir.setVisible(false);
+        txtPesquisar.setVisible(false);
+    } else {
         scrollPane.setVisible(true);
+        btnEditar.setVisible(true);
+        btnNovo.setVisible(true);
+        btnExcluir.setVisible(true);
+        txtPesquisar.setVisible(true);
+        recarregarListaClientes();
+       // DefaultTableModel modelo = (DefaultTableModel) tableCSF.getModel();
+      //  tableCSF.setColumnIdentifiers(new String[]{"ID", "Nome", "Endereço", "Email", "Plano Contratado"}); // Define as colunas se ainda não estiverem definidas.
+        
+      //  ClienteDAO clienteDao = new ClienteDAO();
+      //  clienteDao.carregarClientesNoModelo(modelo); // Carrega os clientes no modelo
+    }
+    listaClientesVisivel = !listaClientesVisivel; // Alterna o estado
+    botaoNovoVisivel = !botaoNovoVisivel;
+    botaoEditarVisivel = !botaoEditarVisivel;
+    botaoExcluirVisivel = !botaoExcluirVisivel;
+    textoPesquisarVisivel = !textoPesquisarVisivel;
     }//GEN-LAST:event_btnClientesActionPerformed
 
     private void btnFuncActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFuncActionPerformed
         // TODO add your handling code here:
-        scrollPane.setVisible(true);
+        
     }//GEN-LAST:event_btnFuncActionPerformed
 
     private void btnServicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnServicoActionPerformed
         // TODO add your handling code here:
-        scrollPane.setVisible(true);
+        
     }//GEN-LAST:event_btnServicoActionPerformed
+
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+        new LoginView().setVisible(true);
+    }//GEN-LAST:event_btnLogoutActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        int selectedRow = tableCSF.getSelectedRow();
+        if (selectedRow != -1) { // -1 significa que nenhuma linha está selecionada
+            int clienteId = (Integer) tableCSF.getValueAt(selectedRow, 0); // Supondo que o ID está na primeira coluna
+            ClienteDAO clienteDao = new ClienteDAO();
+            Cliente cliente = clienteDao.buscarCliente(clienteId);
+            if (cliente != null) {
+                ClienteEdicao dialogoEdicao = new ClienteEdicao(TelaPrincipal.this, true, cliente, this);
+                dialogoEdicao.setVisible(true);
+
+                // Opcional: Atualizar a tabela após a edição
+            //    carregarClientes();
+            } else {
+                JOptionPane.showMessageDialog(TelaPrincipal.this, "Erro ao buscar os dados do cliente.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(TelaPrincipal.this, "Por favor, selecione um cliente para editar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
+        // TODO add your handling code here:
+        ClienteNovo dialogoEdicao = new ClienteNovo(this, true, this);
+        dialogoEdicao.setVisible(true);
+    }//GEN-LAST:event_btnNovoActionPerformed
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = tableCSF.getSelectedRow();
+        if (selectedRow != -1) { // Verifica se uma linha está selecionada
+        int clienteId = (Integer) tableCSF.getValueAt(selectedRow, 0); // Assume que o ID do cliente está na primeira coluna
+
+        // Pedir confirmação do usuário
+        int confirmacao = JOptionPane.showConfirmDialog(this, 
+                "Tem certeza que deseja excluir este cliente?", "Confirmar Exclusão", 
+                JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
+        if (confirmacao == JOptionPane.YES_OPTION) {
+            ClienteDAO clienteDao = new ClienteDAO();
+            clienteDao.deletarCliente(clienteId);            
+            JOptionPane.showMessageDialog(this, "Cliente excluído com sucesso.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            recarregarListaClientes(); // Atualiza a lista para refletir a exclusão
+}
+       
+    } else {
+        JOptionPane.showMessageDialog(this, "Por favor, selecione um cliente para excluir.", "Aviso", JOptionPane.WARNING_MESSAGE);
+    }
+        
+    }//GEN-LAST:event_btnExcluirActionPerformed
+    
+
 
     /**
      * @param args the command line arguments
@@ -200,14 +326,20 @@ public class TelaPrincipal extends javax.swing.JFrame {
             }
         });
     }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable Lista;
     private javax.swing.JPanel PainelCentral;
     private javax.swing.JPanel PainelLateral;
     private javax.swing.JButton btnClientes;
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnFunc;
+    private javax.swing.JButton btnLogout;
+    private javax.swing.JButton btnNovo;
     private javax.swing.JButton btnServico;
     private javax.swing.JScrollPane scrollPane;
+    private javax.swing.JTable tableCSF;
+    private javax.swing.JTextField txtPesquisar;
     // End of variables declaration//GEN-END:variables
 }

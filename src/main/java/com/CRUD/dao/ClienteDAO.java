@@ -4,6 +4,7 @@
  */
 package com.CRUD.dao;
 import com.CRUD.modelo.Cliente;
+import java.util.List;
 //import com.CRUD.util.Conexao;
 //import java.sql.Connection;
 //import java.sql.PreparedStatement;
@@ -11,6 +12,7 @@ import com.CRUD.modelo.Cliente;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -83,6 +85,35 @@ public class ClienteDAO {
     }
     return cliente;
 
+    }
+    
+    public List<Cliente> getTodosClientes() {
+    EntityManager em = emf.createEntityManager();
+    try {
+        // Cria uma consulta para buscar todos os clientes
+        return em.createQuery("SELECT c FROM Cliente c", Cliente.class).getResultList();
+    } finally {
+        em.close(); // Sempre feche o EntityManager após o uso
+    }
+    
+    
+}
+    //Carrega os clientes
+        public void carregarClientesNoModelo(DefaultTableModel modelo) {
+        modelo.setRowCount(0); // Limpa o modelo
+
+        List<Cliente> clientes = getTodosClientes(); // Usa o método existente para buscar os clientes
+
+        // Preenche o modelo com os dados dos clientes
+        for (Cliente cliente : clientes) {
+            modelo.addRow(new Object[]{
+                cliente.getId(),
+                cliente.getNome(),
+                cliente.getEndereco(),
+                cliente.getEmail(),
+                cliente.getPlanoContratado()
+            });
+        }
     }
     
 }
