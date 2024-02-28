@@ -12,6 +12,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -115,5 +116,18 @@ public class ClienteDAO {
             });
         }
     }
+        
+    public List<Cliente> pesquisarPorNome(String texto) {
+    List<Cliente> resultados;
+    EntityManager em = emf.createEntityManager();
+    try {
+        Query query = em.createQuery("SELECT c FROM Cliente c WHERE LOWER(c.nome) LIKE LOWER(:texto) OR LOWER(c.endereco) LIKE LOWER(:texto)", Cliente.class);
+        query.setParameter("texto", "%" + texto + "%");
+        resultados = query.getResultList();
+    } finally {
+        em.close();
+    }
+    return resultados;
+}
     
 }

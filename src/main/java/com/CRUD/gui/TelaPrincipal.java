@@ -5,7 +5,9 @@
 package com.CRUD.gui;
 
 import com.CRUD.dao.ClienteDAO;
+import com.CRUD.dao.ServicoDAO;
 import com.CRUD.modelo.Cliente;
+import com.CRUD.modelo.Servico;
 import com.CRUD.util.ResizeIMG;
 import java.util.List;
 import javax.swing.ImageIcon;
@@ -31,6 +33,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private boolean botaoEditarVisivel = false;
     private boolean botaoExcluirVisivel = false;
     private boolean textoPesquisarVisivel = false;
+    private enum ContextoPesquisa { CLIENTE, SERVICO, FUNCIONARIO }
+    private ContextoPesquisa contextoAtual = ContextoPesquisa.CLIENTE;
+
     
     public TelaPrincipal() {
         initComponents();
@@ -42,6 +47,18 @@ public class TelaPrincipal extends javax.swing.JFrame {
          txtPesquisar.setVisible(false);
     }
     
+    
+    public void atualizarTabelaClientes(List<Cliente> clientes) {
+    DefaultTableModel modelo = (DefaultTableModel) tableCSF.getModel();
+    modelo.setRowCount(0); // Limpa a tabela antes de recarregar
+    // Assume que o modelo da tabela já tem as colunas definidas. Se não, descomente a próxima linha.
+    modelo.setColumnIdentifiers(new String[]{"ID", "Nome", "Endereço", "Email", "Plano Contratado"});
+    
+    for (Cliente cliente : clientes) {
+        modelo.addRow(new Object[]{cliente.getId(), cliente.getNome(), cliente.getEndereco(), cliente.getEmail(), cliente.getPlanoContratado()});
+    }
+}
+    
     public void recarregarListaClientes() {
     DefaultTableModel modelo = (DefaultTableModel) tableCSF.getModel();
     modelo.setRowCount(0); // Limpa a tabela antes de recarregar
@@ -49,6 +66,25 @@ public class TelaPrincipal extends javax.swing.JFrame {
     
     ClienteDAO clienteDao = new ClienteDAO();
     clienteDao.carregarClientesNoModelo(modelo); // Carrega os clientes no modelo
+}
+    
+    public void atualizarTabelaServicos(List<Servico> servicos) {
+    DefaultTableModel modelo = (DefaultTableModel) tableCSF.getModel();
+    modelo.setRowCount(0); // Limpa a tabela antes de recarregar
+    modelo.setColumnIdentifiers(new String[]{"ID", "Nome", "Preco", "Tipo", "Velocidade Down", "Velocidade Up", "Limite"}); // Define as colunas se ainda não estiverem definidas.
+    
+    for (Servico servico : servicos) {
+        modelo.addRow(new Object[]{servico.getId(), servico.getNome(), servico.getTipo(), servico.getVelocidadeDownload(), servico.getVelocidadeUpload(), servico.getLimiteDados()});
+    }
+}
+    
+    public void recarregarListaServicos() {
+    DefaultTableModel modelo = (DefaultTableModel) tableCSF.getModel();
+    modelo.setRowCount(0); // Limpa a tabela antes de recarregar
+    modelo.setColumnIdentifiers(new String[]{"ID", "Nome", "Preco", "Tipo", "Velocidade Down", "Velocidade Up", "Limite"}); // Define as colunas se ainda não estiverem definidas.
+    
+    ServicoDAO servicoDao = new ServicoDAO();
+    servicoDao.carregarServicoNoModelo(modelo); // Carrega os clientes no modelo
 }
 
     /**
@@ -75,7 +111,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("GN - Geração Net");
-        setPreferredSize(new java.awt.Dimension(800, 600));
 
         PainelLateral.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -86,7 +121,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 btnClientesActionPerformed(evt);
             }
         });
-        PainelLateral.add(btnClientes, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 13, 94, 34));
+        PainelLateral.add(btnClientes, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 94, 34));
 
         btnFunc.setText("Funcionários");
         btnFunc.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
@@ -95,7 +130,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 btnFuncActionPerformed(evt);
             }
         });
-        PainelLateral.add(btnFunc, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 117, 94, 34));
+        PainelLateral.add(btnFunc, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 94, 34));
 
         btnServico.setText("Serviços");
         btnServico.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
@@ -104,7 +139,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 btnServicoActionPerformed(evt);
             }
         });
-        PainelLateral.add(btnServico, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 65, 94, 34));
+        PainelLateral.add(btnServico, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 94, 34));
 
         PainelCentral.setLayout(null);
 
@@ -158,6 +193,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
         btnExcluir.setBounds(480, 450, 70, 25);
 
         txtPesquisar.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Pesquisar", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
+        txtPesquisar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtPesquisarKeyReleased(evt);
+            }
+        });
         PainelCentral.add(txtPesquisar);
         txtPesquisar.setBounds(40, 10, 510, 40);
         txtPesquisar.getAccessibleContext().setAccessibleDescription("");
@@ -167,16 +207,16 @@ public class TelaPrincipal extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(PainelLateral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(PainelLateral, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(PainelCentral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(PainelCentral, javax.swing.GroupLayout.DEFAULT_SIZE, 724, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(PainelLateral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(PainelLateral, javax.swing.GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE)
                     .addComponent(PainelCentral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -186,6 +226,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void btnClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientesActionPerformed
         // TODO add your handling code here:
+        contextoAtual = ContextoPesquisa.CLIENTE;
             if (listaClientesVisivel) {
         scrollPane.setVisible(false); // Esconde a lista
         btnEditar.setVisible(false);
@@ -214,11 +255,51 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void btnFuncActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFuncActionPerformed
         // TODO add your handling code here:
+        contextoAtual = ContextoPesquisa.FUNCIONARIO;
+        if (listaClientesVisivel) {
+        scrollPane.setVisible(false); // Esconde a lista
+        btnEditar.setVisible(false);
+        btnNovo.setVisible(false);
+        btnExcluir.setVisible(false);
+        txtPesquisar.setVisible(false);
+    } else {
+        scrollPane.setVisible(true);
+        btnEditar.setVisible(true);
+        btnNovo.setVisible(true);
+        btnExcluir.setVisible(true);
+        txtPesquisar.setVisible(true);
+        recarregarListaClientes();
+    }
+    listaClientesVisivel = !listaClientesVisivel; // Alterna o estado
+    botaoNovoVisivel = !botaoNovoVisivel;
+    botaoEditarVisivel = !botaoEditarVisivel;
+    botaoExcluirVisivel = !botaoExcluirVisivel;
+    textoPesquisarVisivel = !textoPesquisarVisivel;
         
     }//GEN-LAST:event_btnFuncActionPerformed
 
     private void btnServicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnServicoActionPerformed
         // TODO add your handling code here:
+        contextoAtual = ContextoPesquisa.SERVICO;
+        if (listaClientesVisivel) {
+        scrollPane.setVisible(false); // Esconde a lista
+        btnEditar.setVisible(false);
+        btnNovo.setVisible(false);
+        btnExcluir.setVisible(false);
+        txtPesquisar.setVisible(false);
+    } else {
+        scrollPane.setVisible(true);
+        btnEditar.setVisible(true);
+        btnNovo.setVisible(true);
+        btnExcluir.setVisible(true);
+        txtPesquisar.setVisible(true);
+        recarregarListaServicos();
+    }
+    listaClientesVisivel = !listaClientesVisivel; // Alterna o estado
+    botaoNovoVisivel = !botaoNovoVisivel;
+    botaoEditarVisivel = !botaoEditarVisivel;
+    botaoExcluirVisivel = !botaoExcluirVisivel;
+    textoPesquisarVisivel = !textoPesquisarVisivel;
         
     }//GEN-LAST:event_btnServicoActionPerformed
 
@@ -277,6 +358,30 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }
         
     }//GEN-LAST:event_btnExcluirActionPerformed
+
+    public void pesquisarClientes(String texto) {
+    ClienteDAO clienteDao = new ClienteDAO();
+    List<Cliente> resultado = clienteDao.pesquisarPorNome(texto); // Método a ser implementado
+    atualizarTabelaClientes(resultado); // Método para atualizar a tabela com os resultados
+}
+    
+    public void pesquisar(String texto) {
+    if (contextoAtual == ContextoPesquisa.CLIENTE) {
+        ClienteDAO clienteDao = new ClienteDAO();
+        List<Cliente> resultado = clienteDao.pesquisarPorNome(texto); // Método atualizado
+        atualizarTabelaClientes(resultado); // Método para atualizar a tabela com os resultados
+    } else if (contextoAtual == ContextoPesquisa.SERVICO) {
+        ServicoDAO servicoDao = new ServicoDAO();
+        List<Servico> resultado = servicoDao.pesquisarPorNomeOuTipo(texto); // Método a ser implementado no ServicoDAO
+        atualizarTabelaServicos(resultado); // Método para atualizar a tabela com os resultados
+    }
+}
+    
+    private void txtPesquisarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPesquisarKeyReleased
+        // TODO add your handling code here:
+        String text = txtPesquisar.getText();
+        pesquisar(text);
+    }//GEN-LAST:event_txtPesquisarKeyReleased
     
 
 

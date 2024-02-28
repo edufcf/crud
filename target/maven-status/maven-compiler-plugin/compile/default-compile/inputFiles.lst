@@ -5,11 +5,11 @@ D:\Documents\NetBeansProjects\CRUD\src\main\java\com\CRUD\modelo\Usuario.java
 D:\Documents\NetBeansProjects\CRUD\src\main\java\com\CRUD\gui\TelaPrincipal.java
 D:\Documents\NetBeansProjects\CRUD\src\main\java\com\CRUD\modelo\Cliente.java
 D:\Documents\NetBeansProjects\CRUD\src\main\java\com\CRUD\modelo\Funcionario.java
+D:\Documents\NetBeansProjects\CRUD\src\main\java\com\CRUD\dao\ServicoDAO.java
 D:\Documents\NetBeansProjects\CRUD\src\main\java\com\CRUD\dao\UsuarioDAO.java
 D:\Documents\NetBeansProjects\CRUD\src\main\java\com\CRUD\gui\ClienteNovo.java
 D:\Documents\NetBeansProjects\CRUD\src\main\java\com\CRUD\util\ResizeIMG.java
+D:\Documents\NetBeansProjects\CRUD\src\main\java\com\CRUD\modelo\Servico.java
 D:\Documents\NetBeansProjects\CRUD\src\main\java\com\CRUD\dao\ClienteDAO.java
-D:\Documents\NetBeansProjects\CRUD\src\main\java\com\CRUD\modelo\Serviço.java
-D:\Documents\NetBeansProjects\CRUD\src\main\java\com\CRUD\dao\ServiçoDAO.java
 D:\Documents\NetBeansProjects\CRUD\src\main\java\com\CRUD\util\JPAUtil.java
 D:\Documents\NetBeansProjects\CRUD\src\main\java\com\CRUD\Main.java

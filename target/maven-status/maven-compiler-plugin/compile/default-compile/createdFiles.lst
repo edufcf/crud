@@ -1,11 +1,12 @@
+com\CRUD\dao\ServicoDAO.class
 com\CRUD\gui\TelaPrincipal$8.class
+com\CRUD\gui\TelaPrincipal$ContextoPesquisa.class
 com\CRUD\gui\LoginView.class
 com\CRUD\util\ResizeIMG.class
 com\CRUD\Main.class
 com\CRUD\gui\TelaPrincipal$1.class
 com\CRUD\gui\ClienteNovo$1.class
 com\CRUD\util\JPAUtil.class
-com\CRUD\modelo\Serviço.class
 com\CRUD\gui\TelaPrincipal$4.class
 com\CRUD\gui\ClienteEdicao.class
 com\CRUD\modelo\Funcionario.class
@@ -17,6 +18,7 @@ com\CRUD\gui\TelaPrincipal$7.class
 com\CRUD\dao\FuncionarioDAO.class
 com\CRUD\gui\ClienteEdicao$2.class
 com\CRUD\Main$1.class
+com\CRUD\gui\TelaPrincipal$9.class
 com\CRUD\gui\ClienteNovo$2.class
 com\CRUD\modelo\Cliente.class
 com\CRUD\gui\TelaPrincipal$2.class
@@ -25,6 +27,6 @@ com\CRUD\gui\ClienteNovo.class
 com\CRUD\gui\TelaPrincipal$5.class
 com\CRUD\gui\LoginView$1.class
 com\CRUD\gui\TelaPrincipal$6.class
-com\CRUD\dao\ServiçoDAO.class
 com\CRUD\modelo\Usuario.class
 com\CRUD\gui\TelaPrincipal$3.class
+com\CRUD\modelo\Servico.class

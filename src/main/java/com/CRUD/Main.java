@@ -23,7 +23,7 @@ import javax.swing.UnsupportedLookAndFeelException;
  */
 public class Main {
     public static void main(String[] args) {
-        
+                     
                         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Windows".equals(info.getName())) {
@@ -39,6 +39,7 @@ public class Main {
             public void run() {
                 LoginView loginView = new LoginView();
                 loginView.setVisible(true); // Ou outro método que você usa para mostrar a view
+                
             }
          });
         
